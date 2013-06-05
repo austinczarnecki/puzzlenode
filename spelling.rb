@@ -3,6 +3,6 @@ require './query_case'
 
 file_name = ARGV.first
 
-test = SpellingSuggestions.new(file_name)
+spelling = SpellingSuggestions.new(file_name)
 
-test.spelling_suggestions
+spelling.spelling_suggestions
