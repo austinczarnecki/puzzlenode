@@ -6,20 +6,18 @@ class QueryCase
 		@word2 = word_two
 	end
 
+	# returns the word that shares the lcs with the query
 	def match
-		# returns the correct of the two dictionary words
-		word_one_lcss_size1 = largest_common_substring(@query, @word1)
-		word_one_lcss_size2 = largest_common_substring(@word1, @query)
+		# returns the length of the two dictionary words
+		word_one_lcs_size = largest_common_subsequence(@query, @word1)
 
-		word_one_lcss_size = [word_one_lcss_size1, word_one_lcss_size2].max
-
-		word_two_lcss_size1 = largest_common_substring(@query, @word2)
-		word_two_lcss_size2 = largest_common_substring(@word2, @query)
-
-		word_two_lcss_size = [word_two_lcss_size1, word_two_lcss_size2].max
+		word_two_lcs_size = largest_common_subsequence(@query, @word2)
 
 		# return the word that has a larger lcss with @query
-		if word_one_lcss_size > word_two_lcss_size
+		# note that this defaults to word 2
+		# return error message in this case so that the user knows?
+
+		if word_one_lcs_size > word_two_lcs_size
 			return @word1
 		else
 			return @word2
@@ -27,52 +25,46 @@ class QueryCase
 	end
 
 	private
-		# finds the largest common substring of two words passed as input
-		def largest_common_substring(string1, string2)
+		# finds the largest common subsequence of two words passed as input
+		def largest_common_subsequence(string1, string2)
 			# converts each string into an array
 			array1 = string1.scan(/./)
 			array2 = string2.scan(/./)
 
-			# initialize a variable tracking the longest substring found so far
-			longest_common_substring = 0
+			# sets the c(olumn) and r(ow) variables which are simply the length of the input strings
+			c = array1.size + 1
+			r = array2.size + 1
 
-			# while loop iterator
-			i = 0
+			puts c, r
 
+			# makes an array with r+1 rows and c+1 columns 
+			# reference an x, y coordinate in the array by doing
+			# subsequence_tracker[y][x]
+			subsequence_tracker = Array.new(r) { Array.new(c, 0) }
+			
+			x = 1
+			y = 1
 			# iterate for each letter in the first input word
-			while i < string1.size
-				# initialize the local variable tracking a single substring comparison
-				common_substring_length = 0
-				offset = 0
-
-				array1.each do |letter|
-					# record the index in string 2 where a character matches
-					next_matching_index = array2[offset..-1].index(letter)
-
-					# if a match was detected, record an increase in length of common substring
-					# also set the new offset for searching the next letters
-					if next_matching_index
-						# the next line is debugging code:
-						# puts next_matching_index.to_s + "  " + letter
-
-						# Update the substring length if a match is found
-						# Set a new offset in order to prevent the same character from
-						# being picked up more than once.
-						common_substring_length += 1
-						offset = offset + next_matching_index + 1
+			while y < r
+				while x < c
+					if array1[x - 1] == array2[y - 1]
+						subsequence_tracker[y][x] = subsequence_tracker[y - 1][x - 1] + 1
+					else
+						subsequence_tracker[y][x] = [subsequence_tracker[y - 1][x], subsequence_tracker[y][x - 1]].max
 					end
+
+					x += 1
 				end
 
-				if common_substring_length > longest_common_substring
-					longest_common_substring = common_substring_length
-				end
-
-				# take off the first letter and shift the array over
-				array1.shift
-				i += 1
+				y += 1
+				x = 0
 			end
 
-			# puts longest_common_substring # debugging code!
-			return longest_common_substring
+			puts subsequence_tracker.inspect
+
+			lcs = subsequence_tracker[r - 1][c - 1]
+
+			# puts longest_common_subsequence # debugging code!
+			return lcs
 		end
 end
