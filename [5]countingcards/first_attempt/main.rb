@@ -8,6 +8,7 @@ file_name = ARGV.first
 
 cool = Game.new(file_name)
 
-while cool.another_round_exists?
+while true
+	break if cool.another_round_exists? == false
 	cool.play_round
 end

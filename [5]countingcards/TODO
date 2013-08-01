@@ -1,0 +1,4 @@
+TODO:
+
+track cards in each player's hand and the discard pile.
+track moves from both players' perspective (i.e. if someone claims a pass, the other must claim a receive the same turn)
