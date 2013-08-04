@@ -99,7 +99,7 @@ class Solution
   def make_letter_array(ar)
     letters = []
     for item in ar
-      letters << item[/[a-z]/] # keep just letter without value
+      letters << item[/[a-z]/]
     end
     letters
   end
@@ -129,7 +129,6 @@ class Solution
       end
     end
     new_dict = add_reversals(dictionary_redux)
-    puts "new dict is : " + new_dict.inspect
     return new_dict
   end
 
@@ -186,7 +185,7 @@ class Solution
       end
       i+=1
     end
-    return high_score_info.unshift(word) # check this method in irb
+    return high_score_info.unshift(word)
   end
 
   def find_best_word
@@ -208,7 +207,7 @@ class Solution
     return highest_score_info
   end
 
-  def print_high_score(ar) # mustpass in highest score info from find_best_word
+  def print_high_score(ar) # must pass in highest score info from find_best_word
     i = 0
     x = ar[2][0]
     y = ar[2][1]
@@ -224,7 +223,7 @@ class Solution
     end
     print_board = []
     for item in @board
-      print_board << item.join(" ") # test in irb
+      print_board << item.join(" ")
     end
     open('output.txt', 'w') do |f|
       f.puts print_board
