@@ -24,7 +24,6 @@ class Solution
     get_hand(danny)
     lil = ["Lil"]
     get_hand(lil)
-    #puts shady.inspect, rocky.inspect, danny.inspect, lil.inspect
 
     #set up output file
     output = File.open('output.txt', 'w') do |f2|
@@ -32,10 +31,9 @@ class Solution
       count+=1
       while @ar[@ar_count] #while there are more input lines
         # gets moves and updates the hand of the appropriate player
-        @pending_moves = []
-        @pending_moves << update_hand(shady)
-        @pending_moves << update_hand(rocky)
-        @pending_moves << update_hand(danny)
+        result << update_hand(shady)
+        result << update_hand(rocky)
+        result << update_hand(danny)
 
         moves = get_line
         signal_set = []
@@ -108,7 +106,6 @@ class Solution
 
   def update_hand(ar)
     moves = get_line
-    pending_moves = []
     moves.each do |mv|
       #parse the move
       gain = true if mv[/\+/]
@@ -122,9 +119,6 @@ class Solution
 
       # if the move is a pass, save as a pending move
       if pass
-        if action == "Lil"
-          pending_moves << [mv, ar]
-        end
         if ar.index(card)
           ar[ar.index(card)] = nil
         else
@@ -141,14 +135,13 @@ class Solution
         end
         ar.compact!
       elsif receive
+        if
         ar << card
-        # if the move is a receive, look for a matching pending move and resolve (there should not be conflicts here)
       elsif draw
         ar << card
       end
-      # puts "The player and new hand is: " + ar.inspect
     end
-    pending_moves
+    return true
   end
 
   def validate_pass(ar, action, signal_gain, signal_action, signal_card)
@@ -156,7 +149,6 @@ class Solution
     return false if action != signal_action # signal and move recipients are different
     return false if @discard_pile.index(signal_card) # card is already discarded
     return false if !ar.index(signal_card) # card is not in hand
-    return false if
     return true
   end
   def validate_receive(ar, action, signal_gain, signal_action, signal_card)
